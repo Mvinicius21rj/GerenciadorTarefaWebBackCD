@@ -6,7 +6,7 @@ const TaskController = require('../controller/TaskController');
 router.post('/', TaskController.create);
 router.put('/:id', TaskController.update);
 router.put('/:id/:done', TaskController.done);
-router.get('/:filter/all', TaskController.readAll);
+router.get('/:filter/all/macadress', TaskController.readAll);
 router.get('/:id', TaskController.readById);
 router.delete('/:id', TaskController.delete);
 router.get('/filter/late/:macadress', TaskController.late);

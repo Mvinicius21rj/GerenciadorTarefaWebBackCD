@@ -42,7 +42,7 @@ class TaskController{
        async readAll(req, res){
                         
               await TaskModel
-             .find({macAdress: {'$in':req.body.macAdress}})
+             .find({macAdress: {'$in':req.params.macAdress}})
              .sort('when')
              .then(response => {return res.status(200).json(response)})
              .catch(response => {return res.status(500).json(response)});
