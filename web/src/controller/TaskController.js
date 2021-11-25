@@ -1,6 +1,20 @@
 const { response } = require('express');
 const TaskModel = require('../model/TaskModel');
 
+
+const now = new Date();
+
+const {
+       startOfDay, 
+       endOfDay, 
+       startOfWeek, 
+       endOfWeek, 
+       startOfMonth, 
+       endOfMonth, 
+       startOfYear, 
+       endOfYear
+        } = require('date-fns');
+
 //A controller faz o tráfego, recenbendo e enviando respostas
 class TaskController{
        async create(req, res){
@@ -56,6 +70,58 @@ class TaskController{
              .catch(response => {return res.status(500).json(response)});
              
        }
+       async done(req, res){
+                        
+              await TaskModel
+             .findByIdAndUpdate({'_id':req.params.id},{'done':req.params.done},{new:true})
+             .then(response => {return res.status(200).json(response)})
+             .catch(response => {return res.status(500).json(response)});
+             
+       }
+       async late(req, res){
+              await TaskModel
+              .find({'when':{'$lt': now}, 'macadress': {'$in': req.params.macadress} })
+              .sort('when')
+              .then(response => {return res.status(200).json(response)})
+              .catch(error => {return res.status(500).json(error)});
+          }
+          async today(req, res){
+              await TaskModel
+              .find({'macadress': {'$in': req.params.macadress}, 'when':{'$gte': startOfDay(now), '$lt': endOfDay(now)}})
+              .sort('when')
+              .then(response => {return res.status(200).json(response)})
+              .catch(error => {return res.status(500).json(error)});
+          }
+      
+         
+          async week(req, res){
+              await TaskModel
+              .find({'macadress': {'$in': req.params.macadress}, 'when':{'$gte': startOfWeek(now), '$lt': endOfWeek(now)}})
+              .sort('when')
+              .then(response => {return res.status(200).json(response)})
+              .catch(error => {return res.status(500).json(error)});
+          }
+      
+        
+          async month(req, res){
+              await TaskModel
+              .find({'macadress': {'$in': req.params.macadress}, 'when':{'$gte': startOfMonth(now), '$lt': endOfMonth(now)}})
+              .sort('when')
+              .then(response => {return res.status(200).json(response)})
+              .catch(error => {return res.status(500).json(error)});
+          }
+      
+        
+          async year(req, res){
+              await TaskModel
+              .find({'macadress': {'$in': req.params.macadress}, 'when':{'$gte': startOfYear(now), '$lt': endOfYear(now)}})
+              .sort('when')
+              .then(response => {return res.status(200).json(response)})
+              .catch(error => {return res.status(500).json(error)});
+          }
+      
+      
+
 }
 
 module.exports = new TaskController();
